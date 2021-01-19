@@ -1,5 +1,6 @@
 # ignoring all __pycache__ files:
-__pycache__
+__pycache__/
+*.pyc
 
 # ignore OS generated files:
 .DS_Store
