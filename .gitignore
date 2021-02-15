@@ -2,5 +2,8 @@
 __pycache__/
 *.pyc
 
-# ignore OS generated files:
+# ignore Man OS generated files:
 .DS_Store
+
+# Windows files
+Thumbs.db
