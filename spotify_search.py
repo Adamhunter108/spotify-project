@@ -161,3 +161,8 @@ else:
 	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(searched_artist_id)[x-1]))
 
 print(f"\nVisit {user_search.title()}'s Spotify page via: {searched_artist_url}\n")
+
+
+
+print("Yo")
+
