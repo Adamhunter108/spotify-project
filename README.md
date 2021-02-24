@@ -1,6 +1,6 @@
 # Spotify API Project
 
-![alt text](https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-icon-logo-transparent-vector-1.png "Spotify Logo")
+![alt text](https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-icon-logo-transparent-vector-1.png | width=100)
 
 
 Objective: 
