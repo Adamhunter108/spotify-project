@@ -141,8 +141,16 @@ spotify = Spotify_API(client_id, client_secret)
 user_search = input('Enter an artist here: ')
 
 search_results = spotify.search(user_search, search_type='artist')
-searched_artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
-searched_artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
+
+# this is where we need to raise the exception for IndexError if the user enters an artist that is not on spotify
+try:
+	searched_artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
+	searched_artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
+except IndexError as error:
+	print("Sorry, that artist is not on Spotify.")
+	exit()
+
+
 
 print('\n')
 
