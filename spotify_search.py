@@ -138,7 +138,7 @@ def recent_albums_head():
 
 spotify = Spotify_API(client_id, client_secret)
 
-user_search = input('Enter an artist here: ')
+user_search = input('\nEnter an artist here: ')
 
 search_results = spotify.search(user_search, search_type='artist')
 
@@ -147,10 +147,8 @@ try:
 	searched_artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
 	searched_artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
 except IndexError as error:
-	print("Sorry, that artist is not on Spotify.")
+	print("\nSorry, that artist is not on Spotify. (Check your spelling.)\n")
 	exit()
-
-
 
 print('\n')
 
