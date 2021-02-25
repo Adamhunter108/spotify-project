@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 import base64
 import json
 
+
 client_id = "b75dfd2aa89f4ed985eb2f20638c0633"
 client_secret = "6f994b2726774f8d93146681bb7a7fcd"
 
@@ -81,23 +82,26 @@ class Spotify_API(object):
 		base_url = self.base_url
 		headers = self.get_resource_header()
 		r = requests.get(base_url + searched_artist_id + '/albums', headers=headers, params={'include_groups': 'album'})
-		album_data = r.json() # this is a dict.
-		# print(json.dumps(album_data, indent=4)) # prints albums info
+		album_data = r.json()
 		searched_albums = []
 		for album in album_data['items']:
-			if album['name'] not in searched_albums:
-				searched_albums.append(album['name'])  
-		# i think the move here now is to instead put the album in a dict where key is the album name and the value is the album.lower(),
-		# then i would go through the keys and if the count is greater than 1, remove the [-1] album (to get rid of the older album),
-		# once that is all gone through, i would return just the keys of the dict. 
-		return list(dict.fromkeys(searched_albums))[0:10] # this will return the artist's 10 most recent albums in a list
+			if album['name'].lower() not in searched_albums:
+				searched_albums.append(album['name'].lower()) 
+		top_albums = [] 
+		for album in searched_albums:
+			final_album = []
+			for word in album.split(' '):
+				word = word.capitalize()
+				final_album.append(word)
+			final_album = ' '.join(final_album)
+			top_albums.append(final_album)
+		return top_albums[0:10]
 
 	def get_artists_top_tracks(self, searched_artist_id):
 		base_url = self.base_url
 		headers = self.get_resource_header()
 		r = requests.get(base_url + searched_artist_id + '/top-tracks', headers=headers, params={'include_groups': 'top-track', 'country':'US', 'limit': 11})
 		top_tracks = r.json()
-		#print(json.dumps(top_tracks, indent=4))
 		if len(top_tracks['tracks']) < 10:
 			return [top_tracks['tracks'][x]['name'] for x in range(len(top_tracks['tracks']))]
 		else:
