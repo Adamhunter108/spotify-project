@@ -4,9 +4,17 @@ from urllib.parse import urlencode
 import base64
 import json
 
-
 client_id = "b75dfd2aa89f4ed985eb2f20638c0633"
 client_secret = "6f994b2726774f8d93146681bb7a7fcd"
+
+
+
+# divide Spotify_API class into smaller, more managable classes
+
+# create r function this way it is not repeated so much
+
+
+
 
 class Spotify_API(object):
 	access_token = None
@@ -18,9 +26,8 @@ class Spotify_API(object):
 	base_url = f'https://api.spotify.com/v1/artists/'
 	
 	def __init__(self, client_id, client_secret, *args, **kwargs):
-		super().__init__(*args, **kwargs)
 		self.client_id = client_id
-		self.client_secret=client_secret
+		self.client_secret = client_secret
 		
 	def get_client_credentials(self):
 		client_id = self.client_id
@@ -51,22 +58,15 @@ class Spotify_API(object):
 			raise Exception("Could not authenticate client.")
 		data = r.json()
 		now = datetime.datetime.now()
-		access_token = data['access_token']
+		self.access_token = data['access_token']
 		expires_in = data['expires_in']
-		expires = now + datetime.timedelta(seconds=expires_in)
-		self.access_token = access_token
-		self.access_token_expires = expires
-		access_token_did_expire = expires < now
-		return True
+		self.access_token_expires = now + datetime.timedelta(seconds=expires_in)
 	
 	def get_access_token(self):
 		token = self.access_token
 		expires = self.access_token_expires
 		now = datetime.datetime.now()
-		if expires < now:
-			self.perform_auth()
-			return self.get_access_token()
-		elif token == None:
+		if expires < now or token == None:
 			self.perform_auth()
 			return self.get_access_token()
 		return token
@@ -87,14 +87,7 @@ class Spotify_API(object):
 		for album in album_data['items']:
 			if album['name'].lower() not in searched_albums:
 				searched_albums.append(album['name'].lower()) 
-		top_albums = [] 
-		for album in searched_albums:
-			final_album = []
-			for word in album.split(' '):
-				word = word.capitalize()
-				final_album.append(word)
-			final_album = ' '.join(final_album)
-			top_albums.append(final_album)
+		top_albums = [' '.join([word.capitalize() for word in album.split(' ')]) for album in searched_albums] 
 		return top_albums[0:10]
 
 	def get_artists_top_tracks(self, searched_artist_id):
@@ -138,6 +131,9 @@ def recent_albums_head():
 		return f"{user_search.title()}'s Albums:"
 	else:
 		return f"{user_search.title()}'s 10 Most Recent Albums:"
+
+
+
 
 
 spotify = Spotify_API(client_id, client_secret)
