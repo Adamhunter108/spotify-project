@@ -4,10 +4,6 @@ from urllib.parse import urlencode
 import base64
 import json
 
-
-client_id = "b75dfd2aa89f4ed985eb2f20638c0633"
-client_secret = "6f994b2726774f8d93146681bb7a7fcd"
-
 class Spotify_API(object):
 	access_token = None
 	access_token_expires = datetime.datetime.now()
@@ -18,7 +14,6 @@ class Spotify_API(object):
 	base_url = f'https://api.spotify.com/v1/artists/'
 	
 	def __init__(self, client_id, client_secret, *args, **kwargs):
-		super().__init__(*args, **kwargs)
 		self.client_id = client_id
 		self.client_secret=client_secret
 		
@@ -78,6 +73,7 @@ class Spotify_API(object):
 		}
 		return headers
 
+	# This function gets the albums from the artist provided
 	def get_artist_albums(self, searched_artist_id):
 		base_url = self.base_url
 		headers = self.get_resource_header()
