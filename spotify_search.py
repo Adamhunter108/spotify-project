@@ -8,21 +8,17 @@ client_id = "b75dfd2aa89f4ed985eb2f20638c0633"
 client_secret = "6f994b2726774f8d93146681bb7a7fcd"
 
 
-
 # divide Spotify_API class into smaller, more managable classes
 
 # create r function this way it is not repeated so much
-
-
 
 
 class Spotify_API(object):
 	access_token = None
 	access_token_expires = datetime.datetime.now()
 	access_token_did_expire = True
-	client_id = None
-	client_secret = None
-	token_url = 'https://accounts.spotify.com/api/token'
+	# client_id = None
+	# client_secret = None
 	base_url = f'https://api.spotify.com/v1/artists/'
 	
 	def __init__(self, client_id, client_secret, *args, **kwargs):
@@ -43,33 +39,29 @@ class Spotify_API(object):
 		return {
 			'Authorization':f'Basic {client_creds_b64}'
 		}
-	
-	def get_token_data(self):
-		return {
-			'grant_type':'client_credentials'
-		}
-	
+
 	def perform_auth(self):
-		token_url = self.token_url
-		token_data = self.get_token_data()
+		token_url = 'https://accounts.spotify.com/api/token'
+		token_data = {'grant_type':'client_credentials'}
 		token_headers = self.get_token_headers()
 		r = requests.post(token_url, data=token_data, headers=token_headers)
+
+		# OR instead to cut down code we can do the following: 
+		# r = requests.post('https://accounts.spotify.com/api/token', data={'grant_type':'client_credentials'}, headers=self.get_token_headers())
+
 		if r.status_code not in range(200, 299):
 			raise Exception("Could not authenticate client.")
-		data = r.json()
+		token_data = r.json()
 		now = datetime.datetime.now()
-		self.access_token = data['access_token']
-		expires_in = data['expires_in']
+		self.access_token = token_data['access_token']
+		expires_in = token_data['expires_in']
 		self.access_token_expires = now + datetime.timedelta(seconds=expires_in)
 	
 	def get_access_token(self):
-		token = self.access_token
-		expires = self.access_token_expires
-		now = datetime.datetime.now()
-		if expires < now or token == None:
+		if self.access_token_expires < datetime.datetime.now() or self.access_token == None:
 			self.perform_auth()
 			return self.get_access_token()
-		return token
+		return self.access_token
 	
 	def get_resource_header(self):
 		access_token = self.get_access_token()
@@ -78,27 +70,7 @@ class Spotify_API(object):
 		}
 		return headers
 
-	def get_artist_albums(self, searched_artist_id):
-		base_url = self.base_url
-		headers = self.get_resource_header()
-		r = requests.get(base_url + searched_artist_id + '/albums', headers=headers, params={'include_groups': 'album'})
-		album_data = r.json()
-		searched_albums = []
-		for album in album_data['items']:
-			if album['name'].lower() not in searched_albums:
-				searched_albums.append(album['name'].lower()) 
-		top_albums = [' '.join([word.capitalize() for word in album.split(' ')]) for album in searched_albums] 
-		return top_albums[0:10]
-
-	def get_artists_top_tracks(self, searched_artist_id):
-		base_url = self.base_url
-		headers = self.get_resource_header()
-		r = requests.get(base_url + searched_artist_id + '/top-tracks', headers=headers, params={'include_groups': 'top-track', 'country':'US', 'limit': 11})
-		top_tracks = r.json()
-		if len(top_tracks['tracks']) < 10:
-			return [top_tracks['tracks'][x]['name'] for x in range(len(top_tracks['tracks']))]
-		else:
-			return [top_tracks['tracks'][x]['name'] for x in range(10)] # returns artist's top 10 tracks in a list
+#This would be a good place to start a new class that takes the creds of a creds class and insert them into an artist_info class. 
 
 	def base_search(self, query_params):
 		headers = self.get_resource_header()
@@ -122,19 +94,38 @@ class Spotify_API(object):
 		query_params = urlencode({'q':query, 'type':search_type.lower()})
 		return self.base_search(query_params)
 
-def recent_albums_head():
-	if len(spotify.get_artist_albums(searched_artist_id)) == 0:
+	def get_artist_albums(self, artist_id):
+		base_url = self.base_url
+		headers = self.get_resource_header()
+		r = requests.get(base_url + artist_id + '/albums', headers=headers, params={'include_groups': 'album'})
+		album_data = r.json()
+		searched_albums = []
+		for album in album_data['items']:
+			if album['name'].lower() not in searched_albums:
+				searched_albums.append(album['name'].lower()) 
+		top_albums = [' '.join([word.capitalize() for word in album.split(' ')]) for album in searched_albums] 
+		return top_albums[0:10]
+
+	def get_artists_top_tracks(self, artist_id):
+		base_url = self.base_url
+		headers = self.get_resource_header()
+		r = requests.get(base_url + artist_id + '/top-tracks', headers=headers, params={'include_groups': 'top-track', 'country':'US', 'limit': 11})
+		top_tracks = r.json()
+		if len(top_tracks['tracks']) < 10:
+			return [top_tracks['tracks'][x]['name'] for x in range(len(top_tracks['tracks']))]
+		else:
+			return [top_tracks['tracks'][x]['name'] for x in range(10)] # returns artist's top 10 tracks in a list
+
+
+def recent_albums_header():
+	if len(spotify.get_artist_albums(artist_id)) == 0:
 		return f'{user_search.title()} has no albums with Spotify.'
-	elif len(spotify.get_artist_albums(searched_artist_id)) == 1:
+	elif len(spotify.get_artist_albums(artist_id)) == 1:
 		return f"{user_search.title()}'s Album:"
-	elif len(spotify.get_artist_albums(searched_artist_id)) < 10:
+	elif len(spotify.get_artist_albums(artist_id)) < 10:
 		return f"{user_search.title()}'s Albums:"
 	else:
 		return f"{user_search.title()}'s 10 Most Recent Albums:"
-
-
-
-
 
 spotify = Spotify_API(client_id, client_secret)
 
@@ -144,28 +135,26 @@ search_results = spotify.search(user_search, search_type='artist')
 
 # this is where we need to raise the exception for IndexError if the user enters an artist that is not on spotify
 try:
-	searched_artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
-	searched_artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
+	artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
+	artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
 except IndexError as error:
 	print("\nSorry, that artist is not on Spotify.\n")
 	exit()
 
-
-
 print('\n')
 
-print(recent_albums_head() + '\n')
+print(recent_albums_header() + '\n')
 
-for album in spotify.get_artist_albums(searched_artist_id):
+for album in spotify.get_artist_albums(artist_id):
 	print(album)
 
 print(f"\n{user_search.title()}'s Top Tracks on Spotify: \n")
 
-if len(spotify.get_artists_top_tracks(searched_artist_id)) < 10:
-  for x in range(1, (len(spotify.get_artists_top_tracks(searched_artist_id))+1)):
-	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(searched_artist_id)[x-1]))
+if len(spotify.get_artists_top_tracks(artist_id)) < 10:
+  for x in range(1, (len(spotify.get_artists_top_tracks(artist_id))+1)):
+	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(artist_id)[x-1]))
 else: 
   for x in range(1,11):
-	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(searched_artist_id)[x-1]))
+	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(artist_id)[x-1]))
 
-print(f"\nVisit {user_search.title()}'s Spotify page via: {searched_artist_url}\n")
+print(f"\nVisit {user_search.title()}'s Spotify page via: {artist_url}\n")
