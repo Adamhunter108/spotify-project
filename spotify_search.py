@@ -131,6 +131,10 @@ spotify = Spotify_API(client_id, client_secret)
 
 user_search = input('\nEnter an artist here: ')
 
+if user_search == '':
+	print("I'm sorry, you did not enter anything.")
+	exit()
+
 search_results = spotify.search(user_search, search_type='artist')
 
 # this is where we need to raise the exception for IndexError if the user enters an artist that is not on spotify
