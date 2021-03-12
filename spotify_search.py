@@ -82,15 +82,22 @@ class Spotify_API(object):
 		return r.json()
 		
 	def search(self, query=None, operator=None, operator_query=None, search_type='artist'):
+		# print(query)
 		if query == None:
 			raise Exception("A query is required.")
 		if isinstance(query, dict):
 			query = ' '.join([f'{k}:{v}' for k,v in query.items()])
-		if operator != None and operator_query != None:
-			if operator.lower() == 'or' or operator.lower() == 'not':
-				operator = operator.upper()
-				if isinstance(operator_query, str):
-					query = f'{query} {operator} {operator_query}'
+
+		print(operator)
+		print(operator_query)
+
+		# wtf is this below!
+
+		# if operator != None and operator_query != None:
+		# 	if operator.lower() == 'or' or operator.lower() == 'not':
+		# 		operator = operator.upper()
+		# 		if isinstance(operator_query, str):
+		# 			query = f'{query} {operator} {operator_query}'
 		query_params = urlencode({'q':query, 'type':search_type.lower()})
 		return self.base_search(query_params)
 
