@@ -15,5 +15,5 @@ Requirements:
 
 Instructions:
 
-1. In the Terminal (or Windows Command Line), navigate to `spotify_search.py`.
-2. Copy and paste the following and hit enter: `python3 spotify_search.py`
+1. In the Terminal (or Windows Command Line), navigate to `main.py`.
+2. Copy and paste the following and hit enter: `python3 main.py`
