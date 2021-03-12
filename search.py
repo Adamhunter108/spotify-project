@@ -1,8 +1,6 @@
 from client_id_and_secret import *
 import requests
-import datetime
 from urllib.parse import urlencode
-import base64
 import json
 
 class Query_Search(object):

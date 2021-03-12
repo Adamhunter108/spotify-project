@@ -2,7 +2,6 @@ from client_id_and_secret import *
 from search import *
 import requests
 import datetime
-from urllib.parse import urlencode
 import base64
 import json
 
