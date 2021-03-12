@@ -111,6 +111,8 @@ class Spotify_API(Query_Search):
 		return headers
 
 
+# take the rest of this code and lets turn it into a refined search results file. 
+
 def recent_albums_header():
 	if len(spotify.get_artist_albums(artist_id)) == 0:
 		return f'{user_search.title()} has no albums with Spotify.'
