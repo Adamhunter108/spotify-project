@@ -5,7 +5,7 @@ import json
 
 class Query_Search(object):
 
-	base_url = 'https://api.spotify.com/v1/artists/'
+	base_url = f'https://api.spotify.com/v1/artists/'
 
 	def search(self, query=None, operator=None, operator_query=None, search_type='artist'):
 		if query == None:
