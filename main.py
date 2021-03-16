@@ -1,12 +1,10 @@
 from spotify_creds import *
-from query import *
-from search import *
+from Spotify_API import *
+from Query_Search import *
 
 
 # anything on this page that is out of flow, you can make a artist class
 # artist class will handle the output we want to display
-
-
 
 
 def recent_albums_header():

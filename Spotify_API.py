@@ -1,5 +1,5 @@
 from spotify_creds import *
-from search import *
+from Query_Search import *
 import requests
 import datetime
 import base64
