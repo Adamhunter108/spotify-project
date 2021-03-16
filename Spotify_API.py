@@ -9,17 +9,12 @@ class Spotify_API(Query_Search):
 	access_token = None
 	access_token_expires = datetime.datetime.now()
 	access_token_did_expire = True
-	# client_id = None
-	# client_secret = None
-	
-	
+		
 	def __init__(self, client_id, client_secret, *args, **kwargs):
 		self.client_id = client_id
 		self.client_secret = client_secret
 		
 	def get_client_credentials(self):
-		# client_id = self.client_id
-		# client_secret = self.client_secret
 		if client_secret == None or client_id == None:
 			raise Exception("You must set client_id and client_secret.")
 		client_creds = f'{client_id}:{client_secret}'

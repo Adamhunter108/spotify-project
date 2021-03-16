@@ -1,56 +1,36 @@
 from spotify_creds import *
 from Spotify_API import *
 from Query_Search import *
+from Artist_Return import *
 
 
 # anything on this page that is out of flow, you can make a artist class
 # artist class will handle the output we want to display
 
-
-def recent_albums_header():
-	if len(spotify.get_artist_albums(artist_id)) == 0:
-		return f'{user_input.title()} has no albums with Spotify.'
-	elif len(spotify.get_artist_albums(artist_id)) == 1:
-		return f"{user_input.title()}'s Album:"
-	elif len(spotify.get_artist_albums(artist_id)) < 10:
-		return f"{user_input.title()}'s Albums:"
-	else:
-		return f"{user_input.title()}'s 10 Most Recent Albums:"
-
+# authorizes creds for the Spotify API
 spotify = Spotify_API(client_id, client_secret)
 
-user_input = input('\nEnter an artist here: ')
+# lets user search for an artist
+user_input = Query_Search.user_input
 
-if user_input == '':
-	print("\nDid you forget to type something?\n")
-	exit()
+# validates user's search to confirm they searched for an artist
+Query_Search.artist_validation(user_input)
 
-search_results = spotify.artist_search(user_input, search_type='artist')
+# returns json data of searched artist
+search_results = spotify.artist_search(Query_Search.user_input)
 
 # if search_results == '' or search_results == {}:
 	# print("Sorry That is not on Spotify.")
 
-try:
-	artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
-	artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
-except IndexError as error:
-	print("\nSorry, that artist is not on Spotify.\n")
-	exit()
+artist_id = search_results['artists']['items'][0]['id']
+print(artist_id)
 
-print('\n')
-
-print(recent_albums_header() + '\n')
+Artist_Return.recent_albums_header()
 
 for album in spotify.get_artist_albums(artist_id):
 	print(album)
 
-print(f"\n{user_input.title()}'s Top Tracks on Spotify: \n")
+print(f"\n{Query_Search.user_input.title()}'s Top Tracks on Spotify: \n")
 
-if len(spotify.get_artists_top_tracks(artist_id)) < 10:
-  for x in range(1, (len(spotify.get_artists_top_tracks(artist_id))+1)):
-	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(artist_id)[x-1]))
-else: 
-  for x in range(1,11):
-	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(artist_id)[x-1]))
 
-print(f"\nVisit {user_input.title()}'s Spotify page via: {artist_url}\n")
+print(f"\nVisit {Query_Search.user_input.title()}'s Spotify page via: {artist_url}\n")

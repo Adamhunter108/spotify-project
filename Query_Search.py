@@ -7,11 +7,17 @@ class Query_Search(object):
 
 	base_url = f'https://api.spotify.com/v1/artists/'
 
-	#you can have a function here which confirms the user_input as an artist
+	user_input = input('\nEnter an artist here: ')
 
-	def artist_search(self, query=None, search_type='artist'):
-		query_params = urlencode({'q':query, 'type':search_type.lower()})
-		headers = self.get_resource_header() #if we split this into another class, we need to change self
+	def artist_validation(user_input):
+		# user_input = self.user_input
+		if user_input == '':
+			print("\nDid you forget to type something?\n")
+		return user_input
+
+	def artist_search(self, query):
+		query_params = urlencode({'q':query, 'type':'artist'})
+		headers = self.get_resource_header() 
 		endpoint = 'https://api.spotify.com/v1/search'
 		lookup_url = f'{endpoint}?{query_params}'
 		r = requests.get(lookup_url, headers=headers)
