@@ -1,4 +1,4 @@
-from client_id_and_secret import *
+from spotify_creds import *
 from search import *
 import requests
 import datetime

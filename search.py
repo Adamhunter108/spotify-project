@@ -1,4 +1,4 @@
-from client_id_and_secret import *
+from spotify_creds import *
 import requests
 from urllib.parse import urlencode
 import json
@@ -7,20 +7,10 @@ class Query_Search(object):
 
 	base_url = f'https://api.spotify.com/v1/artists/'
 
-	def search(self, query=None, operator=None, operator_query=None, search_type='artist'):
-		if query == None:
-			raise Exception("A query is required.")
-		if isinstance(query, dict):
-			query = ' '.join([f'{k}:{v}' for k,v in query.items()])
-		if operator != None and operator_query != None:
-			if operator.lower() == 'or' or operator.lower() == 'not':
-				operator = operator.upper()
-				if isinstance(operator_query, str):
-					query = f'{query} {operator} {operator_query}'
-		query_params = urlencode({'q':query, 'type':search_type.lower()})
-		return self.base_search(query_params)
+	#you can have a function here which confirms the user_input as an artist
 
-	def base_search(self, query_params):
+	def artist_search(self, query=None, search_type='artist'):
+		query_params = urlencode({'q':query, 'type':search_type.lower()})
 		headers = self.get_resource_header() #if we split this into another class, we need to change self
 		endpoint = 'https://api.spotify.com/v1/search'
 		lookup_url = f'{endpoint}?{query_params}'
@@ -50,3 +40,20 @@ class Query_Search(object):
 			return [top_tracks['tracks'][x]['name'] for x in range(len(top_tracks['tracks']))]
 		else:
 			return [top_tracks['tracks'][x]['name'] for x in range(10)] # returns artist's top 10 tracks in a list
+
+
+# # class Artist(object):
+
+# # 	def __init__(self, artist_id, artist_url=None):
+# # 		self.artist_id = artist_id
+
+# this will return top tracks from artist
+# # 	def get_top_tracks(self):
+# # 		pass
+
+# # 	def get_album_head(self):
+# # 		pass
+
+# this will return albums from artist
+# # 	def get_album_format(self):
+# # 		pass
