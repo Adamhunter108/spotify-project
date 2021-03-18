@@ -20,9 +20,9 @@ Query_Search.artist_validation(user_input)
 artist_id = spotify.artist_search(user_input)['artists']['items'][0]['id']
 
 
-album_head = Artist_Return.recent_albums_header()
+artist_return = Artist_Return(artist_id)
 
-print(album_head)
+artist_return.recent_albums_header
 
 for album in spotify.get_artist_albums(artist_id):
 	print(album)

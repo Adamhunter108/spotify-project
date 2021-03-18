@@ -1,10 +1,9 @@
-from main import *
 from spotify_api import *
 from query_search import *
 from spotify_creds import *
 
 
-class Artist_Return(object):
+class Artist_Return(Spotify_API):
 
 	def __init__(self, artist_id):
 		self.artist_id = artist_id
