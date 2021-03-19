@@ -3,12 +3,19 @@ from query_search import *
 from spotify_creds import *
 
 
+
 class Artist_Return(Spotify_API):
+
+	spotify = Spotify_API(client_id, client_secret)
+	artist_id = spotify.artist_search(user_input)['artists']['items'][0]['id']
+	artist_url = spotify.artist_search(user_input)['artists']['items'][0]['external_urls']['spotify']
 
 	def __init__(self, artist_id):
 		self.artist_id = artist_id
 
-	def recent_albums_header():
+	def recent_albums_header(self):
+		spotify = self.spotify
+		artist_id = self.artist_id
 		if len(spotify.get_artist_albums(artist_id)) == 0:
 			return f'{user_input.title()} has no albums with Spotify.'
 		elif len(spotify.get_artist_albums(artist_id)) == 1:
