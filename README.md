@@ -1,19 +1,15 @@
 # Spotify API Project
-![alt text](https://cdn.iconscout.com/icon/free/png-256/spotify-9-282239.png  "Spotify Logo")
+![spotify logo](https://cdn.iconscout.com/icon/free/png-256/spotify-9-282239.png  "Spotify Logo")
 
-Objective: 
-
-To build a tool that calls the Spotify API to retrieve data based off of the search term that we pass to the api.  By doing this we demonstrate how to work with an external API for pulling external data into a system that we've built and how to use that data for our needs.
+###### About: 
+This command line program, built in Python, calls the Spotify API and retrieves data based off of the search term that the user passes to the api.  Based off of the search term (for an artist), the program returns ten most recent albums, top ten songs by the artist and a link to the artist's profile page on spotify.com.
 
 ---
 
-Requirements:
-
+###### Requirements:
 * Python 3 (or higher)
 
 ---
 
-Instructions:
-
-1. In the Terminal (or Windows Command Line), navigate to `main.py`.
-2. Copy and paste the following and hit enter: `python3 main.py`
+###### Instrutions:
+In your Terminal (or PowerShell), navigate to the root directory and copy and paste `python3 main.py` into your Terminal and press Enter (or Return).
