@@ -9,21 +9,8 @@ class Query_Search(object):
 
 	user_input = input('\nEnter an artist here: ')
 
-	def artist_validation(user_input):
-		# user_input = self.user_input
-		if user_input == '':
-			print("\nDid you forget to type something?\n")
-		return user_input
-
-	def artist_search(self, query):
-		query_params = urlencode({'q':query, 'type':'artist'})
-		headers = self.get_resource_header() 
-		endpoint = 'https://api.spotify.com/v1/search'
-		lookup_url = f'{endpoint}?{query_params}'
-		r = requests.get(lookup_url, headers=headers)
-		if r.status_code not in range(200,299):
-			return {}
-		return r.json()
+	# def __init__(self, artist_id):
+	# 	artist_id = self.artist_id
 
 	def get_artist_albums(self, artist_id):
 		base_url = self.base_url
@@ -37,6 +24,20 @@ class Query_Search(object):
 		top_albums = [' '.join([word.capitalize() for word in album.split(' ')]) for album in searched_albums] 
 		return top_albums[0:10]
 
+	def recent_albums_header(self, artist_id):
+		if len(self.get_artist_albums(artist_id)) == 0:
+			return f'{self.user_input.title()} has no albums with Spotify.'
+		elif len(self.get_artist_albums(artist_id)) == 1:
+			return f"{self.user_input.title()}'s Album:"
+		elif len(self.get_artist_albums(artist_id)) < 10:
+			return f"{self.user_input.title()}'s Albums:"
+		else:
+			return f"{self.user_input.title()}'s 10 Most Recent Albums:"
+
+	def recent_albums(self, artist_id):
+		for album in self.get_artist_albums(artist_id):
+			print(album)
+
 	def get_artists_top_tracks(self, artist_id):
 		base_url = self.base_url
 		headers = self.get_resource_header()
@@ -46,3 +47,11 @@ class Query_Search(object):
 			return [top_tracks['tracks'][x]['name'] for x in range(len(top_tracks['tracks']))]
 		else:
 			return [top_tracks['tracks'][x]['name'] for x in range(10)] # returns artist's top 10 tracks in a list
+
+	def artists_top_tracks(self, artist_id):
+		if len(self.get_artists_top_tracks(artist_id)) < 10:
+			for x in range(1, (len(self.get_artists_top_tracks(artist_id))+1)):
+				print(str(x) + ' - ' + (self.get_artists_top_tracks(artist_id)[x-1]))
+		else: 
+			for x in range(1,11):
+				print(str(x) + ' - ' + (self.get_artists_top_tracks(artist_id)[x-1]))

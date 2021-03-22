@@ -52,3 +52,13 @@ class Spotify_API(Query_Search):
 			'Authorization':f'Bearer {access_token}'
 		}
 		return headers
+
+	def artist_search(self, query):
+		query_params = urlencode({'q':query, 'type':'artist'})
+		headers = self.get_resource_header() 
+		endpoint = 'https://api.spotify.com/v1/search'
+		lookup_url = f'{endpoint}?{query_params}'
+		r = requests.get(lookup_url, headers=headers)
+		if r.status_code not in range(200,299):
+			return {}
+		return r.json()
