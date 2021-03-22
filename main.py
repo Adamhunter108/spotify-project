@@ -13,25 +13,23 @@ def recent_albums_header():
 	else:
 		return f"{user_search.title()}'s 10 Most Recent Albums:"
 
+
 spotify = Spotify_API(client_id, client_secret)
 
 user_search = input('\nEnter an artist here: ')
 
 if user_search == '':
-	print("\nDid you foget to type something?\n")
+	print("\nDid you forget to type something?\n")
 	exit()
 
 search_results = spotify.search(user_search, search_type='artist')
 
-# this is where we need to raise the exception for IndexError if the user enters an artist that is not on spotify
 try:
 	artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
 	artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
 except IndexError as error:
 	print("\nSorry, that artist is not on Spotify.\n")
 	exit()
-
-print('\n')
 
 print(recent_albums_header() + '\n')
 
@@ -48,3 +46,4 @@ else:
 	  print(str(x) + ' - ' + (spotify.get_artists_top_tracks(artist_id)[x-1]))
 
 print(f"\nVisit {user_search.title()}'s Spotify page via: {artist_url}\n")
+
