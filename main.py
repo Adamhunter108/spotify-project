@@ -9,13 +9,13 @@ spotify = Spotify_API(client_id, client_secret)
 
 
 # lets user search for an artist
-user_input = Query_Search.user_input
+user_input = spotify.user_input
 
 # validates user's search to confirm they searched for an artist
 # Query_Search.artist_validation(user_input)
 
 # returns json data of searched artist
-artist_id = spotify.artist_search(user_input)['artists']['items'][0]['id']
+artist_id = spotify.get_artist_id(user_input)
 artist_url = spotify.artist_search(user_input)['artists']['items'][0]['external_urls']['spotify']
 
 print("\n" + spotify.recent_albums_header(artist_id) + "\n")

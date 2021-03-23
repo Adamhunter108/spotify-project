@@ -9,6 +9,8 @@ class Spotify_API(Query_Search):
 	access_token = None
 	access_token_expires = datetime.datetime.now()
 	access_token_did_expire = True
+
+	user_input = input('\nEnter an artist here: ')
 		
 	def __init__(self, client_id, client_secret, *args, **kwargs):
 		self.client_id = client_id
@@ -62,3 +64,6 @@ class Spotify_API(Query_Search):
 		if r.status_code not in range(200,299):
 			return {}
 		return r.json()
+
+	def get_artist_id(self, user_input):
+		return self.artist_search(user_input)['artists']['items'][0]['id']

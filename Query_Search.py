@@ -7,15 +7,15 @@ class Query_Search(object):
 
 	base_url = f'https://api.spotify.com/v1/artists/'
 
-	user_input = input('\nEnter an artist here: ')
+	# user_input = input('\nEnter an artist here: ')
 
 	# def __init__(self, artist_id):
-	# 	artist_id = self.artist_id
+	# 	artist_id = self.get_artist_id(self.user_input)
 
 	def get_artist_albums(self, artist_id):
 		base_url = self.base_url
 		headers = self.get_resource_header()
-		r = requests.get(base_url + artist_id + '/albums', headers=headers, params={'include_groups': 'album'})
+		r = requests.get(base_url + self.get_artist_id(self.user_input) + '/albums', headers=headers, params={'include_groups': 'album'})
 		album_data = r.json()
 		searched_albums = []
 		for album in album_data['items']:
