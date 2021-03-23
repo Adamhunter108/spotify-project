@@ -1,6 +1,6 @@
 from spotify_creds import *
-from Spotify_API import *
-from Query_Search import *
+from spotify_api import *
+from query_search import *
 
 
 # authorizes creds for the Spotify API
