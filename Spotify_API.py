@@ -10,12 +10,28 @@ class Spotify_API(Query_Search):
 	access_token_expires = datetime.datetime.now()
 	access_token_did_expire = True
 
-	user_input = input('\nEnter an artist here: ')
-		
 	def __init__(self, client_id, client_secret, *args, **kwargs):
 		self.client_id = client_id
 		self.client_secret = client_secret
+
+	user_input = input('\nEnter an artist here: ')
+	
+	if user_input == '':
+		print("\nDid you forget to type something?\n")
+		exit()
+
+
+#IndexError for bad search is not handled yet
+	# search_results = spotify.search(user_search, search_type='artist')
+
+	# try:
+	# 	artist_id = search_results['artists']['items'][0]['id'] # gets artist's ID
+	# 	artist_url = search_results['artists']['items'][0]['external_urls']['spotify']  # gets artist's URL 
+	# except IndexError as error:
+	# 	print("\nSorry, that artist is not on Spotify.\n")
+	# 	exit()
 		
+
 	def get_client_credentials(self):
 		if client_secret == None or client_id == None:
 			raise Exception("You must set client_id and client_secret.")
