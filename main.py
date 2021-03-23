@@ -1,6 +1,8 @@
 from spotify_creds import *
 from spotify_api import *
 from query_search import *
+from spotify_creds import *
+
 
 # authorizes creds for the Spotify API
 spotify = Spotify_API(client_id, client_secret)
