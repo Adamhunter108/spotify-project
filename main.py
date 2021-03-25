@@ -14,8 +14,12 @@ user_input = spotify.user_input
 # Query_Search.artist_validation(user_input)
 
 # returns json data of searched artist
-artist_id = spotify.get_artist_id(user_input)
-artist_url = spotify.artist_search(user_input)['artists']['items'][0]['external_urls']['spotify']
+try:
+	artist_id = spotify.get_artist_id(user_input)
+	artist_url = spotify.artist_search(user_input)['artists']['items'][0]['external_urls']['spotify']
+except IndexError as error:
+	print("\nSorry, that artist is not on Spotify.\n")
+	exit()
 
 print("\n" + spotify.recent_albums_header(artist_id) + "\n")
 
